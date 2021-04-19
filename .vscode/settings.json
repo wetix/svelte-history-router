@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": true,
+  "files.associations": {
+    "**/*.min.css": "ignore",
+    "template.html": "ignore"
+  },
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
