@@ -117,6 +117,11 @@
   dependencies:
     "@types/node" "*"
 
+"@wetix/utils@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@wetix/utils/-/utils-0.2.1.tgz#2901b4b720f59d985b31e5bd92fedc1351c209b9"
+  integrity sha512-7amNIx+++9Za7EkTshm4mvQyDBGDgcV6soyZGmSnYyDRM5ShXh5mkTk1r36oxz33JbsGVTrLm5SFU5pV9Eudfg==
+
 ansi-styles@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-3.2.1.tgz#41fbb20243e50b12be0f04b8dedbf07520ce841d"
