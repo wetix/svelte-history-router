@@ -8,7 +8,8 @@ const PLACEHOLDER_NODE = 3;
 
 class Node {
   parent: null | Node = null;
-  path: String = "";
+  path: string = "";
+  param: null | string = null;
   children: Node[] = [];
   type: number;
   component: typeof SvelteComponent;
@@ -18,8 +19,12 @@ class Node {
     path: string = "",
     comp: typeof SvelteComponent = null
   ) {
+    // this.parent = parent;
     this.type = type;
     this.path = path;
+    if (type === PLACEHOLDER_NODE) {
+      this.param = path.substr(1);
+    }
     this.component = comp;
   }
 }
@@ -45,6 +50,41 @@ const getNodeType = (path: string) => {
   if (path == "*") return WILDCARD_NODE;
   return NORMAL_NODE;
 };
+
+/*
+The registered path, against which the router matches incoming requests, can
+contain two types of parameters:
+ Syntax    Type
+ :name     named parameter
+ *name     catch-all parameter
+
+Named parameters are dynamic path segments. They match anything until the
+next '/' or the path end:
+  Path: /
+
+  Requests:
+    /blog/go/request-routers            match: category="go", post="request-routers"
+    /blog/go/request-routers/           no match, but the router would redirect
+    /blog/go/                           no match
+    /blog/go/request-routers/comments   no match
+
+  
+  Path: /blog/:category/:post
+
+  Requests:
+    /blog/go/request-routers            match: category="go", post="request-routers"
+    /blog/go/request-routers/           no match, but the router would redirect
+    /blog/go/                           no match
+    /blog/go/request-routers/comments   no match
+
+ Path: /files/*filepath
+
+ Requests:
+  /files/                             match: filepath="/"
+  /files/LICENSE                      match: filepath="/LICENSE"
+  /files/templates/article.html       match: filepath="/templates/article.html"
+  /files                              no match, but the router would redirect
+*/
 
 class RadixTree {
   #root: Node = new Node(ROOT_NODE, "/");

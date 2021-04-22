@@ -2,8 +2,21 @@
   import { writable } from "svelte/store";
 
   export const currentRoute = writable({});
+
+  const updateRoute = (url: string) => {};
   export const push = (url: string) => {
-    history.pushState({}, "", url);
+    updateRoute(url);
+    window.history.pushState({}, "", url);
+  };
+  export const pop = () => {
+    window.history.back();
+    setTimeout(() => {
+      updateRoute(window.location.href);
+    }, 0);
+  };
+  export const replace = (url: string) => {
+    updateRoute(url);
+    window.history.replaceState({}, "", url);
   };
 
   window.addEventListener("popstate", (event: PopStateEvent) => {
@@ -41,6 +54,10 @@
     await tick();
     dispatch(type, detail);
   };
+
+  currentRoute.subscribe((v) => {
+    console.log("debug route =>", v);
+  });
 
   window.onpopstate = console.log;
   console.log(new URL("http://google.com"));
