@@ -123,32 +123,51 @@ class RadixTree {
     console.log(this.#root);
   };
 
-  lookupRoute = (uri: string): null | typeof SvelteComponent => {
-    const url = new URL(uri);
-    const { pathname } = url;
-    const paths = pathname.split("/");
-    console.log("lookup =>");
-    console.log(url);
-    console.log(paths);
+  lookupRoute = (url: string): null | typeof SvelteComponent => {
+    // const url = new URL(uri);
+    // const { pathname } = url;
+    const paths = url.replace(/^\//, "").split("/");
+    console.log("lookup =>", url.replace(/^\//, ""));
+    console.log("paths =>", paths);
 
     let node = this.#root;
-    let i = 1;
+    let children = node.children;
+    let i = 0;
     let len = paths.length;
     for (; i < len; i++) {
       const path = paths[i];
 
-      for (let j = 0; j < node.children.length; j++) {
-        if (path != node.children[j].path) {
+      console.log(`path ${i} => ${path}`);
+      walk: for (let j = 0; j < children.length; j++) {
+        const child = children[j];
+        console.log(`${path} == ${child.path}`, path == child.path);
+        if ([WILDCARD_NODE, PLACEHOLDER_NODE].includes(child.type)) {
+          if (i == len - 1) {
+            console.log("point 1");
+            return child.component;
+          }
+
+          children = child.children;
+          break walk;
+        }
+
+        if (path != child.path) {
           continue;
         }
 
-        if (i == len - 1) {
-          return node.children[j].component;
+        if (path === child.path) {
+          if (i == len - 1) {
+            console.log("point 2");
+            return child.component;
+          }
+
+          children = children[j].children;
+          break walk;
         }
-        console.log();
       }
-      console.log("path =>", path);
     }
+
+    console.log("point 3");
 
     return null;
   };

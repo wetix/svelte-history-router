@@ -1,6 +1,11 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
 
-  "include": ["src/**/*", "src/*.ts", "node_modules/@wetix/utils/**/*"],
+  "include": [
+    "src/**/*",
+    "src/*.ts",
+    "node_modules/@wetix/utils/**/*",
+    "public/main.ts"
+  ],
   "exclude": ["__sapper__/*", "public/*"]
 }

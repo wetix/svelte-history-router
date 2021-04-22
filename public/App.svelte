@@ -1,6 +1,6 @@
 <script lang="ts">
   import { wrapComponent } from "@wetix/utils";
-  import Router from "./Router.svelte";
+  import Router from "../src/Router.svelte";
   import Page from "./Page.svelte";
 
   export let name: string;
@@ -8,7 +8,8 @@
   const routes = {
     "/": wrapComponent(Page, { title: "Home" }),
     "/test": wrapComponent(Page, { title: "Test Page" }),
-    "/me/profile": Page,
+    "/me/profile": wrapComponent(Page, { title: "My Profile" }),
+    "/me/:var1/:var2": Page,
     "/me/:name": Page,
     "/me/*": Page,
     "/about-us": Page,

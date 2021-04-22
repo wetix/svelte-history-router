@@ -1,4 +1,4 @@
-# Svelte Router
+# Svelte History Router
 
 > A high performance history based router using History API.
 
@@ -8,13 +8,30 @@
 
 </p>
 
+## Installation
+
+```console
+npm install svelte-history-router
+```
+
+or
+
+```console
+yarn add svelte-history-router
+```
+
+## Why another Router?
+
+- Most of the router implementation are pretty naive, they use regex under the hook, which may have bad performance on routing (especially ).
+- Most of the router using context api, which may required some setup steps when we using with `vite` or `snowpack`.
+
 ## Features ✨
 
 - History based routing
 - TypeScript as First Class Citizen
 - Lightweight
 - High performance
-- Compactible with ESModule (ok to use with `vite` and `snowpack`)
+- Ship with multiple formats (commonjs, iife, esm)
 - No extra dependency
 - Dynamically-imported components and code-splitting
 - Reactive functions

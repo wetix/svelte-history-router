@@ -2,10 +2,18 @@
   import { writable } from "svelte/store";
 
   export const currentRoute = writable({});
+  const location$ = writable(location.pathname);
 
-  const updateRoute = (url: string) => {};
+  let router = null;
+  const updateRoute = (url: string) => {
+    // router.lookupRoute(url);
+    console.log(router);
+    console.log("Route to =>", url);
+  };
+
   export const push = (url: string) => {
-    updateRoute(url);
+    // updateRoute(url);
+    location$.set(url);
     window.history.pushState({}, "", url);
   };
   export const pop = () => {
@@ -19,13 +27,9 @@
     window.history.replaceState({}, "", url);
   };
 
-  window.addEventListener("popstate", (event: PopStateEvent) => {
-    console.log(
-      "location: " +
-        document.location +
-        ", state: " +
-        JSON.stringify(event.state)
-    );
+  // detect user click back or next on browser
+  window.addEventListener("popstate", () => {
+    location$.set(location.pathname);
   });
 </script>
 
@@ -33,8 +37,11 @@
   import { createEventDispatcher, tick } from "svelte";
   import RadixTree from "./radix_tree";
 
+  const dispatch = createEventDispatcher();
+
   export let routes: Record<string, any> = {};
 
+  router = new RadixTree();
   const newRouter = () => {
     const trie = new RadixTree();
     Object.entries(routes).forEach(([k, v]) => {
@@ -47,23 +54,21 @@
   };
 
   const r = newRouter();
-  let component = r.lookupRoute(location.href);
-  const dispatch = createEventDispatcher();
+  let component = r.lookupRoute(window.location.href);
+  console.log("Location href =>", window.location.href);
 
-  const dispatchNext = async (type: string, detail?: any) => {
+  // const dispatchNext = async (type: string, detail?: any) => {
+  //   await tick();
+  //   dispatch(type, detail);
+  // };
+
+  location$.subscribe(async (loc) => {
     await tick();
-    dispatch(type, detail);
-  };
-
-  currentRoute.subscribe((v) => {
-    console.log("debug route =>", v);
+    console.log("location change =>", loc);
+    component = r.lookupRoute(loc);
   });
-
-  window.onpopstate = console.log;
-  console.log(new URL("http://google.com"));
-  // $: console.log(routes);
 </script>
 
 {#if component}
-  <svelte:component this={component} />
+  <svelte:component this={component} params={{}} />
 {/if}
