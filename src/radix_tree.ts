@@ -1,5 +1,7 @@
 import type { SvelteComponent } from "svelte";
 
+type Component = typeof SvelteComponent;
+
 // node types
 const ROOT_NODE = 0;
 const NORMAL_NODE = 1;
@@ -12,20 +14,15 @@ class Node {
   param: null | string = null;
   children: Node[] = [];
   type: number;
-  component: typeof SvelteComponent;
+  component: Component = null;
 
-  constructor(
-    type: number,
-    path: string = "",
-    comp: typeof SvelteComponent = null
-  ) {
+  constructor(type: number, path: string = "") {
     // this.parent = parent;
     this.type = type;
     this.path = path;
     if (type === PLACEHOLDER_NODE) {
       this.param = path.substr(1);
     }
-    this.component = comp;
   }
 }
 
@@ -86,57 +83,124 @@ next '/' or the path end:
   /files                              no match, but the router would redirect
 */
 
+type RouterOption = {
+  routes: Record<string, typeof SvelteComponent>;
+};
+
+type RouteResult = {
+  params: object;
+  component: typeof SvelteComponent;
+};
+
 class RadixTree {
   #root: Node = new Node(ROOT_NODE, "/");
+  constructor(opt: RouterOption) {
+    Object.entries(opt.routes).forEach(([k, v]) => {
+      this.insertRoute(k, v);
+    });
 
-  insertRoute = (url: string, comp: typeof SvelteComponent) => {
-    const paths = url.trim().split("/");
-    console.log("path =>", url);
+    console.log(this.#root);
+  }
 
-    let i = 0;
-    let len = paths.length;
+  insertRoute = (loc: string, component: typeof SvelteComponent) => {
+    const url = new URL(
+      /^(http|https)\:\/\//.test(loc) ? loc : "http://wetix.my" + loc
+    );
+
     let node = this.#root;
+    let { pathname } = url;
+    // pathname = pathname.replace(/^\//, "")
     let childNode: Node;
     let nodeType: number;
-    let idx: number = 0;
-    let path: string = "";
+    console.log("==================================>");
+    console.log("pathname =====>", pathname);
+    if (pathname === "/") {
+      node.path = pathname;
+      node.type = getNodeType(pathname);
+      node.component = component;
+      return;
+    }
 
-    for (; i < len; i++) {
-      path = paths[i];
-      if (path === "") continue;
+    let path = "";
 
-      // check the path exists or not
-      idx = node.children.findIndex((v) => v.path === path);
-      nodeType = getNodeType(path);
-      childNode = new Node(nodeType, path, comp);
-      if (idx < 0) {
-        node.children.push(childNode);
+    while (pathname.length > 0) {
+      pathname = pathname.replace(/^\//, "");
+      const offset = pathname.indexOf("/");
+      if (offset > -1) {
+        path = pathname.substr(0, offset);
       } else {
-        node = node.children[idx];
-        console.log("procedd next");
-        continue;
+        path = pathname.substr(0);
       }
 
-      node = childNode;
-      console.log("nodeType =>", nodeType);
+      const regexp = new RegExp(`^${path}`);
+      pathname = pathname.replace(regexp, "");
+      console.log("path =>", pathname.indexOf("/"), path);
+      nodeType = getNodeType(path);
+      childNode = new Node(nodeType, path);
+
+      const idx = node.children.findIndex((v) => v.path === path);
+      if (idx < 0) {
+        node.children.push(childNode);
+        node = childNode;
+      } else {
+        node = node.children[idx];
+      }
+
+      console.log("Final pathname=>", pathname, pathname.length);
+      if (pathname === "") {
+        childNode.component = component;
+        break;
+      }
     }
-    console.log(this.#root);
+
+    console.log("==================================>");
+    // let i = 0;
+    // let len = paths.length;
+    // let node = this.#root;
+
+    // let idx: number = 0;
+    // let path: string = "";
+
+    // for (; i < len; i++) {
+    //   path = paths[i];
+    //   if (path === "") continue;
+
+    //   // check the path exists or not
+
+    //   nodeType = getNodeType(path);
+
+    //   node = childNode;
+    //   console.log("nodeType =>", nodeType);
+    // }
+    // console.log(this.#root);
   };
 
-  lookupRoute = (url: string): null | typeof SvelteComponent => {
-    // const url = new URL(uri);
-    // const { pathname } = url;
-    const paths = url.replace(/^\//, "").split("/");
-    console.log("lookup =>", url.replace(/^\//, ""));
-    console.log("paths =>", paths);
+  lookupRoute = (uri: string): RouteResult => {
+    const url = new URL(`http://wetix.my${uri}`);
+    let { pathname } = url;
+    pathname = pathname.replace(/^\//, "");
 
     let node = this.#root;
+    let component: Component = null;
+    const params = {};
+    if (pathname === "") {
+      component = node.component;
+      return {
+        params,
+        component,
+      };
+    }
+
+    const paths = pathname.split("/");
+
+    // const paths = url.replace(/^\//, "").split("/");
+    // console.log("lookup =>", url.replace(/^\//, ""));
+    // console.log("paths =>", paths);
     let children = node.children;
     let i = 0;
     let len = paths.length;
-    for (; i < len; i++) {
+    outer: for (; i < len; i++) {
       const path = paths[i];
-
       console.log(`path ${i} => ${path}`);
       walk: for (let j = 0; j < children.length; j++) {
         const child = children[j];
@@ -144,32 +208,30 @@ class RadixTree {
         if ([WILDCARD_NODE, PLACEHOLDER_NODE].includes(child.type)) {
           if (i == len - 1) {
             console.log("point 1");
-            return child.component;
+            component = child.component;
+            break outer;
           }
-
           children = child.children;
           break walk;
         }
-
         if (path != child.path) {
           continue;
         }
-
         if (path === child.path) {
           if (i == len - 1) {
             console.log("point 2");
-            return child.component;
+            break outer;
           }
-
           children = children[j].children;
           break walk;
         }
       }
     }
-
-    console.log("point 3");
-
-    return null;
+    // console.log("point 3");
+    return {
+      params,
+      component: null,
+    };
   };
 }
 

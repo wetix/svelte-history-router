@@ -35,26 +35,17 @@
 
 <script lang="ts">
   import { createEventDispatcher, tick } from "svelte";
-  import RadixTree from "./radix_tree";
+  import Router from "./radix_tree";
 
   const dispatch = createEventDispatcher();
 
   export let routes: Record<string, any> = {};
 
-  router = new RadixTree();
-  const newRouter = () => {
-    const trie = new RadixTree();
-    Object.entries(routes).forEach(([k, v]) => {
-      // console.log("====================>");
-      // console.log(k);
-      trie.insertRoute(k, v);
-      // component = v;
-    });
-    return trie;
-  };
+  router = new Router({
+    routes,
+  });
 
-  const r = newRouter();
-  let component = r.lookupRoute(window.location.href);
+  // let component = router.lookupRoute(window.location.href);
   console.log("Location href =>", window.location.href);
 
   // const dispatchNext = async (type: string, detail?: any) => {
@@ -62,13 +53,18 @@
   //   dispatch(type, detail);
   // };
 
+  let component = null;
+  let params = {};
   location$.subscribe(async (loc) => {
-    await tick();
     console.log("location change =>", loc);
-    component = r.lookupRoute(loc);
+    const result = router.lookupRoute(loc);
+    await tick();
+    console.log("Result =>", result);
+    // if location is same, don't replace the component
+    component = result.component;
+    params = result.params;
+    // component = router.lookupRoute(loc);
   });
 </script>
 
-{#if component}
-  <svelte:component this={component} params={{}} />
-{/if}
+<svelte:component this={component} {params} />

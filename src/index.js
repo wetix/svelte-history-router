@@ -1,3 +1,3 @@
-import Router, { push, pop, replace } from "./Router.svelte";
+import Router, { currentRoute, push, pop, replace } from "./Router.svelte";
 
-export { Router, push, pop, replace };
+export { Router, currentRoute, push, pop, replace };

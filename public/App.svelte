@@ -2,6 +2,8 @@
   import { wrapComponent } from "@wetix/utils";
   import Router from "../src/Router.svelte";
   import Page from "./Page.svelte";
+  import AboutUsPage from "./pages/AboutUs.svelte";
+  import QueryPage from "./pages/QueryString.svelte";
 
   export let name: string;
 
@@ -11,8 +13,9 @@
     "/me/profile": wrapComponent(Page, { title: "My Profile" }),
     "/me/:var1/:var2": Page,
     "/me/:name": Page,
-    "/me/*": Page,
-    "/about-us": Page,
+    // "/me/*": Page,
+    "/query": QueryPage,
+    "/about-us": AboutUsPage,
   };
 </script>
 

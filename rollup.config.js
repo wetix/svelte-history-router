@@ -57,6 +57,12 @@ if (production) {
       name: "svelteHistoryRouter",
       file: "lib/index.js",
     },
+    {
+      sourcemap: true,
+      format: "iife",
+      name: "svelteHistoryRouter",
+      file: "lib/index.min.js",
+    },
   ];
 }
 
