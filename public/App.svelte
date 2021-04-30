@@ -8,9 +8,11 @@
   export let name: string;
 
   const routes = {
-    "/": wrapComponent(Page, { title: "Home" }),
+    "/": wrapComponent(Page, { title: "Home Page" }),
     "/test": wrapComponent(Page, { title: "Test Page" }),
-    "/me/profile": wrapComponent(Page, { title: "My Profile" }),
+    "/test/:param1/:param2": wrapComponent(Page, { title: "Test Page" }),
+    // "/test/*": wrapComponent(Page, { title: "Test Page" }),
+    "/me/profile": wrapComponent(Page, { title: "My Profile Page" }),
     "/me/:name": Page,
     "/me/:id/profile": Page,
     "/me/:id/info": Page,
