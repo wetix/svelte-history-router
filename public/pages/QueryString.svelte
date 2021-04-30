@@ -1,24 +1,37 @@
 <script lang="ts">
-  import { currentRoute, push, replace } from "../../src";
+  import { fly } from "svelte/transition";
 
-  console.log($currentRoute);
+  import { location, push, replace } from "../../src";
+
+  location.subscribe(console.log);
 </script>
 
-<div
-  class="link"
-  on:click={() => replace(`/query?mode=replace&ts=${new Date().toISOString()}`)}
->
-  Push Query String
+<div class="box" in:fly>
+  <div
+    class="link"
+    on:click={() =>
+      replace(
+        `/query?mode=replace&symbol=${encodeURIComponent(
+          `!@#$%^&*()++_))__`
+        )}&ts=${encodeURIComponent(new Date().toISOString())}`
+      )}
+  >
+    Replace Query String
+  </div>
+  <div
+    class="link"
+    on:click={() => push(`/query?mode=push&ts=${new Date().toISOString()}`)}
+  >
+    Push Query String
+  </div>
+  <div class="link" on:click={() => replace("/")}>Home</div>
+  <div>Query String : {JSON.stringify($location)}</div>
 </div>
-<div
-  class="link"
-  on:click={() => push(`/query?mode=push&ts=${new Date().toISOString()}`)}
->
-  Replace Query String
-</div>
-<div>Query String : {JSON.stringify($currentRoute)}</div>
 
 <style>
+  .box {
+    word-wrap: break-word;
+  }
   .link {
     cursor: pointer;
     color: blue;

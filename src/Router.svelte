@@ -1,35 +1,26 @@
 <script context="module" lang="ts">
-  import { writable } from "svelte/store";
+  import { derived, writable } from "svelte/store";
 
-  export const currentRoute = writable({});
-  const location$ = writable(location.pathname);
+  const location$ = writable(new URL(window.location.href));
 
   let router = null;
-  const updateRoute = (url: string) => {
-    // router.lookupRoute(url);
-    console.log(router);
-    console.log("Route to =>", url);
-  };
-
+  export const location = derived(location$, (loc) => loc);
   export const push = (url: string) => {
-    // updateRoute(url);
-    location$.set(url);
+    location$.set(new URL(`${window.location.origin}${url}`));
     window.history.pushState({}, "", url);
   };
   export const pop = () => {
     window.history.back();
-    setTimeout(() => {
-      updateRoute(window.location.href);
-    }, 0);
+    location$.set(new URL(window.location.href));
   };
   export const replace = (url: string) => {
-    updateRoute(url);
+    location$.set(new URL(`${window.location.origin}${url}`));
     window.history.replaceState({}, "", url);
   };
 
   // detect user click back or next on browser
   window.addEventListener("popstate", () => {
-    location$.set(location.pathname);
+    location$.set(new URL(window.location.href));
   });
 </script>
 
@@ -55,15 +46,19 @@
 
   let component = null;
   let params = {};
+  let prevLoc: URL = null;
   location$.subscribe(async (loc) => {
-    console.log("location change =>", loc);
-    const result = router.lookupRoute(loc);
-    await tick();
-    console.log("Result =>", result);
     // if location is same, don't replace the component
-    component = result.component;
-    params = result.params;
-    // component = router.lookupRoute(loc);
+    console.log("Previous =>", prevLoc);
+    console.log("Current =>", loc);
+    if (!prevLoc || prevLoc.pathname !== loc.pathname) {
+      const result = router.lookupRoute(loc);
+      await tick();
+      component = result.component;
+      params = result.params;
+    }
+
+    prevLoc = loc;
   });
 </script>
 

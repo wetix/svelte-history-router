@@ -175,10 +175,11 @@ class RadixTree {
     // console.log(this.#root);
   };
 
-  lookupRoute = (uri: string): RouteResult => {
-    const url = new URL(`http://wetix.my${uri}`);
+  lookupRoute = (url: URL): RouteResult => {
     let { pathname } = url;
     pathname = pathname.replace(/^\//, "");
+
+    console.log("lookUp =>", pathname);
 
     let node = this.#root;
     let component: Component = null;
@@ -193,12 +194,10 @@ class RadixTree {
 
     const paths = pathname.split("/");
 
-    // const paths = url.replace(/^\//, "").split("/");
-    // console.log("lookup =>", url.replace(/^\//, ""));
-    // console.log("paths =>", paths);
     let children = node.children;
     let i = 0;
     let len = paths.length;
+    const possibleRoutes = [];
     outer: for (; i < len; i++) {
       const path = paths[i];
       console.log(`path ${i} => ${path}`);
@@ -214,23 +213,25 @@ class RadixTree {
           children = child.children;
           break walk;
         }
+        console.log(`childpath ${i},${j} => ${path} ${child.path}`);
         if (path != child.path) {
           continue;
         }
-        if (path === child.path) {
-          if (i == len - 1) {
-            console.log("point 2");
-            break outer;
-          }
-          children = children[j].children;
-          break walk;
+        if (i == len - 1) {
+          console.log(child);
+          component = child.component;
+          console.log("point 2");
+          break outer;
         }
+        console.log("here");
+        children = children[j].children;
+        break walk;
       }
     }
-    // console.log("point 3");
+
     return {
       params,
-      component: null,
+      component,
     };
   };
 }
