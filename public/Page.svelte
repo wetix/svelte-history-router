@@ -13,6 +13,18 @@
     >My Profile Page</a
   >
 </p>
+<p>
+  <a
+    href="#"
+    on:click|preventDefault={() => push("/me/joker/profile?funny=true")}
+    >Joker Page</a
+  >
+</p>
+<p>
+  <a href="#" on:click|preventDefault={() => push("/me/batman/profile")}
+    >Batman Page</a
+  >
+</p>
 <p><a href="#/ok">Hash Link</a></p>
 
 <!-- markup (zero or more items) goes here -->

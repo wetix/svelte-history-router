@@ -62,6 +62,7 @@ if (production) {
       format: "iife",
       name: "svelteHistoryRouter",
       file: "lib/index.min.js",
+      plugins: [terser()],
     },
   ];
 }

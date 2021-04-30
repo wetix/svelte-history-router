@@ -5,19 +5,20 @@ type Component = typeof SvelteComponent;
 // node types
 const ROOT_NODE = 0;
 const NORMAL_NODE = 1;
-const WILDCARD_NODE = 2;
-const PLACEHOLDER_NODE = 3;
+const PLACEHOLDER_NODE = 2;
+const WILDCARD_NODE = 3;
 
 class Node {
-  parent: null | Node = null;
   path: string = "";
   param: null | string = null;
   children: Node[] = [];
-  type: number;
+  type: number = 0;
+  parent: null | Node = null;
+  wildcard: null | Node = null;
   component: Component = null;
 
-  constructor(type: number, path: string = "") {
-    // this.parent = parent;
+  constructor(parent: Node = null, type: number = 0, path: string = "") {
+    this.parent = parent;
     this.type = type;
     this.path = path;
     if (type === PLACEHOLDER_NODE) {
@@ -44,7 +45,7 @@ class Node {
 
 const getNodeType = (path: string) => {
   if (path.startsWith(":")) return PLACEHOLDER_NODE;
-  if (path == "*") return WILDCARD_NODE;
+  if (path.includes("*")) return WILDCARD_NODE;
   return NORMAL_NODE;
 };
 
@@ -92,8 +93,8 @@ type RouteResult = {
   component: typeof SvelteComponent;
 };
 
-class RadixTree {
-  #root: Node = new Node(ROOT_NODE, "/");
+class Router {
+  #root: Node = new Node();
   constructor(opt: RouterOption) {
     Object.entries(opt.routes).forEach(([k, v]) => {
       this.insertRoute(k, v);
@@ -102,88 +103,62 @@ class RadixTree {
     console.log(this.#root);
   }
 
-  insertRoute = (loc: string, component: typeof SvelteComponent) => {
+  insertRoute = (loc: string, component: Component) => {
     const url = new URL(
       /^(http|https)\:\/\//.test(loc) ? loc : "http://wetix.my" + loc
     );
 
     let node = this.#root;
-    let { pathname } = url;
-    // pathname = pathname.replace(/^\//, "")
-    let childNode: Node;
-    let nodeType: number;
-    console.log("==================================>");
-    console.log("pathname =====>", pathname);
-    if (pathname === "/") {
+    let pathname = url.pathname.substr(1);
+    if (pathname == "") {
       node.path = pathname;
-      node.type = getNodeType(pathname);
       node.component = component;
       return;
     }
 
-    let path = "";
+    console.log("==================================>");
+    console.log("pathname =====>", pathname);
+    const paths = pathname.split("/");
+    const len = paths.length;
 
-    while (pathname.length > 0) {
-      pathname = pathname.replace(/^\//, "");
-      const offset = pathname.indexOf("/");
-      if (offset > -1) {
-        path = pathname.substr(0, offset);
-      } else {
-        path = pathname.substr(0);
+    let childNode: Node;
+    let nodeType: number;
+    let path = "";
+    let idx = 0;
+    let i = 0;
+
+    for (; i < len; i++) {
+      path = paths[i];
+      nodeType = getNodeType(path);
+      childNode = new Node(node, nodeType, path);
+      switch (nodeType) {
+        case WILDCARD_NODE:
+          if (node.wildcard != null)
+            throw new Error("multiple wildcard doesn't allow");
+          node.wildcard = childNode;
+          break;
       }
 
-      const regexp = new RegExp(`^${path}`);
-      pathname = pathname.replace(regexp, "");
-      console.log("path =>", pathname.indexOf("/"), path);
-      nodeType = getNodeType(path);
-      childNode = new Node(nodeType, path);
-
-      const idx = node.children.findIndex((v) => v.path === path);
+      idx = node.children.findIndex((v) => v.path == path);
       if (idx < 0) {
         node.children.push(childNode);
         node = childNode;
       } else {
         node = node.children[idx];
       }
-
-      console.log("Final pathname=>", pathname, pathname.length);
-      if (pathname === "") {
-        childNode.component = component;
-        break;
-      }
     }
 
-    console.log("==================================>");
-    // let i = 0;
-    // let len = paths.length;
-    // let node = this.#root;
-
-    // let idx: number = 0;
-    // let path: string = "";
-
-    // for (; i < len; i++) {
-    //   path = paths[i];
-    //   if (path === "") continue;
-
-    //   // check the path exists or not
-
-    //   nodeType = getNodeType(path);
-
-    //   node = childNode;
-    //   console.log("nodeType =>", nodeType);
-    // }
-    // console.log(this.#root);
+    childNode.component = component;
   };
 
   lookupRoute = (url: URL): RouteResult => {
-    let { pathname } = url;
-    pathname = pathname.replace(/^\//, "");
-
+    let pathname = url.pathname.substr(1);
+    console.log("==================================>");
     console.log("lookUp =>", pathname);
 
     let node = this.#root;
     let component: Component = null;
-    const params = {};
+    let params = {};
     if (pathname === "") {
       component = node.component;
       return {
@@ -193,18 +168,26 @@ class RadixTree {
     }
 
     const paths = pathname.split("/");
+    const len = paths.length;
 
     let children = node.children;
     let i = 0;
-    let len = paths.length;
-    const possibleRoutes = [];
+    // const possibleRoutes = [];
     outer: for (; i < len; i++) {
       const path = paths[i];
       console.log(`path ${i} => ${path}`);
       walk: for (let j = 0; j < children.length; j++) {
         const child = children[j];
         console.log(`${path} == ${child.path}`, path == child.path);
-        if ([WILDCARD_NODE, PLACEHOLDER_NODE].includes(child.type)) {
+        // if exact path match, then next
+        if (path != child.path) {
+          // children = child.children;
+          continue;
+        }
+
+        console.log("HERE !!!!!!!");
+        if (child.type == PLACEHOLDER_NODE) {
+          params = Object.assign(params, { [child.param]: path });
           if (i == len - 1) {
             console.log("point 1");
             component = child.component;
@@ -213,10 +196,8 @@ class RadixTree {
           children = child.children;
           break walk;
         }
-        console.log(`childpath ${i},${j} => ${path} ${child.path}`);
-        if (path != child.path) {
-          continue;
-        }
+        console.log(`childpath ${i},${len - 1},${j} => ${path} ${child.path}`);
+
         if (i == len - 1) {
           console.log(child);
           component = child.component;
@@ -236,4 +217,4 @@ class RadixTree {
   };
 }
 
-export default RadixTree;
+export default Router;
