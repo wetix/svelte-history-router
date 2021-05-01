@@ -14,6 +14,9 @@
   >
 </p>
 <p>
+  <a href="#" on:click|preventDefault={() => push("/me/any")}>Me Any Page</a>
+</p>
+<p>
   <a
     href="#"
     on:click|preventDefault={() => push("/me/joker/profile?funny=true")}

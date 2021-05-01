@@ -172,41 +172,51 @@ class Router {
 
     let children = node.children;
     let i = 0;
+    let child;
     // const possibleRoutes = [];
     outer: for (; i < len; i++) {
       const path = paths[i];
       console.log(`path ${i} => ${path}`);
-      walk: for (let j = 0; j < children.length; j++) {
-        const child = children[j];
+      inner: for (let j = 0; j < children.length; j++) {
+        child = children[j];
         console.log(`${path} == ${child.path}`, path == child.path);
         // if exact path match, then next
-        if (path != child.path) {
-          // children = child.children;
-          continue;
+        if (path == child.path) {
+          if (i >= len - 1) {
+            component = child.component;
+            break outer;
+          }
+
+          children = child.children;
+          break inner;
         }
 
         console.log("HERE !!!!!!!");
         if (child.type == PLACEHOLDER_NODE) {
           params = Object.assign(params, { [child.param]: path });
           if (i == len - 1) {
-            console.log("point 1");
             component = child.component;
             break outer;
           }
           children = child.children;
-          break walk;
+          break inner;
         }
-        console.log(`childpath ${i},${len - 1},${j} => ${path} ${child.path}`);
+        console.log(`childpath ${i},${j},${len - 1} => ${path} ${child.path}`);
 
-        if (i == len - 1) {
-          console.log(child);
-          component = child.component;
-          console.log("point 2");
-          break outer;
-        }
-        console.log("here");
-        children = children[j].children;
-        break walk;
+        // if (i == len - 1) {
+        //   console.log(child);
+        //   component = child.component;
+        //   console.log("point 2");
+        //   break outer;
+        // }
+
+        // children = children[j].children;
+        // break inner;
+      }
+
+      if (component == null && child.wildcard != null) {
+        component = child.wildcard.component;
+        break outer;
       }
     }
 

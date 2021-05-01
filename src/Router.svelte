@@ -25,12 +25,12 @@
 </script>
 
 <script lang="ts">
-  import { createEventDispatcher, tick } from "svelte";
+  import { createEventDispatcher, SvelteComponent, tick } from "svelte";
   import Router from "./radix_tree";
 
   const dispatch = createEventDispatcher();
 
-  export let routes: Record<string, any> = {};
+  export let routes: Record<string, typeof SvelteComponent> = {};
 
   router = new Router({
     routes,

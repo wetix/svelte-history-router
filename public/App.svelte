@@ -9,7 +9,6 @@
 
   const routes = {
     "/": wrapComponent(Page, { title: "Home Page" }),
-    "/*": Page,
     "/test": wrapComponent(Page, { title: "Test Page" }),
     "/test/:param1/:param2": wrapComponent(Page, { title: "Test Page" }),
     // "/test/*": wrapComponent(Page, { title: "Test Page" }),
@@ -17,9 +16,11 @@
     // "/me/:name": Page,
     "/me/:id/profile": wrapComponent(Page, { title: "Some one profile page" }),
     "/me/:id/info": Page,
+    "/me/*": wrapComponent(Page, { title: "Me any page" }),
     // "/me/*": Page,
     "/query": QueryPage,
     "/about-us": AboutUsPage,
+    "/*": Page,
   };
 </script>
 
