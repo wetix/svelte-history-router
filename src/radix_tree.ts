@@ -11,9 +11,10 @@ const WILDCARD_NODE = 3;
 class Node {
   path: string = "";
   param: null | string = null;
-  children: Node[] = [];
+  children: Record<string, Node> = {};
   type: number = 0;
   parent: null | Node = null;
+  placeholder: null | Node = null;
   wildcard: null | Node = null;
   component: Component = null;
 
@@ -85,21 +86,21 @@ next '/' or the path end:
 */
 
 type RouterOption = {
-  routes: Record<string, typeof SvelteComponent>;
+  routes: Record<string, Component>;
 };
 
 type RouteResult = {
   params: object;
-  component: typeof SvelteComponent;
+  component: Component;
 };
 
 class Router {
   #root: Node = new Node();
+
   constructor(opt: RouterOption) {
     Object.entries(opt.routes).forEach(([k, v]) => {
       this.insertRoute(k, v);
     });
-
     console.log(this.#root);
   }
 
@@ -124,7 +125,6 @@ class Router {
     let childNode: Node;
     let nodeType: number;
     let path = "";
-    let idx = 0;
     let i = 0;
 
     for (; i < len; i++) {
@@ -132,23 +132,39 @@ class Router {
       nodeType = getNodeType(path);
       childNode = new Node(node, nodeType, path);
       switch (nodeType) {
+        case PLACEHOLDER_NODE:
+          node.placeholder = childNode;
+          console.log("place hodler", path, node.path, node.placeholder);
+          break;
+
         case WILDCARD_NODE:
           if (node.wildcard != null)
             throw new Error("multiple wildcard doesn't allow");
           node.wildcard = childNode;
           break;
+
+        default:
+          if (!(path in node.children)) {
+            node.children[path] = childNode;
+          } else {
+            childNode = node.children[path];
+          }
+          break;
       }
 
-      idx = node.children.findIndex((v) => v.path == path);
-      if (idx < 0) {
-        node.children.push(childNode);
-        node = childNode;
-      } else {
-        node = node.children[idx];
+      // idx = node.children.findIndex((v) => v.path == path);
+      // if (idx < 0) {
+      //   node.children.push(childNode);
+      //   node = childNode;
+      // } else {
+      node = childNode;
+      if (i >= len - 1) {
+        node.component = component;
       }
+      // }
     }
 
-    childNode.component = component;
+    // childNode.component = component;
   };
 
   lookupRoute = (url: URL): RouteResult => {
@@ -169,60 +185,47 @@ class Router {
 
     const paths = pathname.split("/");
     const len = paths.length;
+    let wildcardNode;
 
-    let children = node.children;
     let i = 0;
-    let child;
-    // const possibleRoutes = [];
-    outer: for (; i < len; i++) {
+    for (; i < len; i++) {
       const path = paths[i];
-      console.log(`path ${i} => ${path}`);
-      inner: for (let j = 0; j < children.length; j++) {
-        child = children[j];
-        console.log(`${path} == ${child.path}`, path == child.path);
-        // if exact path match, then next
-        if (path == child.path) {
-          if (i >= len - 1) {
-            component = child.component;
-            break outer;
-          }
-
-          children = child.children;
-          break inner;
-        }
-
-        console.log("HERE !!!!!!!");
-        if (child.type == PLACEHOLDER_NODE) {
-          params = Object.assign(params, { [child.param]: path });
-          if (i == len - 1) {
-            component = child.component;
-            break outer;
-          }
-          children = child.children;
-          break inner;
-        }
-        console.log(`childpath ${i},${j},${len - 1} => ${path} ${child.path}`);
-
-        // if (i == len - 1) {
-        //   console.log(child);
-        //   component = child.component;
-        //   console.log("point 2");
-        //   break outer;
-        // }
-
-        // children = children[j].children;
-        // break inner;
+      if (node.wildcard !== null) {
+        wildcardNode = node.wildcard;
       }
 
-      if (component == null && child.wildcard != null) {
-        component = child.wildcard.component;
-        break outer;
+      console.log(`path ${i} => ${path}`);
+      const childNode = node.children[path];
+      console.log(childNode);
+      if (childNode) {
+        node = childNode;
+      } else {
+        node = node.placeholder;
+        console.log("placeholder", node);
+        if (node != null) {
+          params = Object.assign({ [node.param]: path });
+          // params[node.paramName] = section
+          // paramsFound = true
+        } else {
+          break;
+        }
       }
     }
 
+    //   if (component == null && child.wildcard != null) {
+    //     component = child.wildcard.component;
+    //     break outer;
+    //   }
+    // }
+
+    if (node == null || node.component == null) {
+      node = wildcardNode;
+    }
+    console.log(node.component);
+
     return {
       params,
-      component,
+      component: node.component,
     };
   };
 }
