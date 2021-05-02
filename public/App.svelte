@@ -15,7 +15,7 @@
     "/me/profile": wrapComponent(Page, { title: "My Profile Page" }),
     // "/me/:name": Page,
     "/me/:id/profile": wrapComponent(Page, { title: "Some one profile page" }),
-    "/me/:id/info": Page,
+    "/me/:id/info": wrapComponent(Page, { title: "Batman info page" }),
     "/me/*": wrapComponent(Page, { title: "Me any page" }),
     // "/me/*": Page,
     "/query": QueryPage,

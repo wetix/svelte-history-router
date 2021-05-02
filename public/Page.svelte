@@ -24,8 +24,8 @@
   >
 </p>
 <p>
-  <a href="#" on:click|preventDefault={() => push("/me/batman/profile")}
-    >Batman Page</a
+  <a href="#" on:click|preventDefault={() => push("/me/batman/info")}
+    >Batman Info Page</a
   >
 </p>
 <p><a href="#/ok">Hash Link</a></p>

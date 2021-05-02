@@ -117,8 +117,6 @@ class Router {
       return;
     }
 
-    console.log("==================================>");
-    console.log("pathname =====>", pathname);
     const paths = pathname.split("/");
     const len = paths.length;
 
@@ -133,8 +131,11 @@ class Router {
       childNode = new Node(node, nodeType, path);
       switch (nodeType) {
         case PLACEHOLDER_NODE:
-          node.placeholder = childNode;
-          console.log("place hodler", path, node.path, node.placeholder);
+          if (node.placeholder) {
+            childNode = node.placeholder;
+          } else {
+            node.placeholder = childNode;
+          }
           break;
 
         case WILDCARD_NODE:
@@ -145,6 +146,7 @@ class Router {
 
         default:
           if (!(path in node.children)) {
+            // console.log("Node path =>", node.path, node);
             node.children[path] = childNode;
           } else {
             childNode = node.children[path];
@@ -152,19 +154,11 @@ class Router {
           break;
       }
 
-      // idx = node.children.findIndex((v) => v.path == path);
-      // if (idx < 0) {
-      //   node.children.push(childNode);
-      //   node = childNode;
-      // } else {
       node = childNode;
       if (i >= len - 1) {
         node.component = component;
       }
-      // }
     }
-
-    // childNode.component = component;
   };
 
   lookupRoute = (url: URL): RouteResult => {
@@ -194,17 +188,13 @@ class Router {
         wildcardNode = node.wildcard;
       }
 
-      console.log(`path ${i} => ${path}`);
       const childNode = node.children[path];
-      console.log(childNode);
       if (childNode) {
         node = childNode;
       } else {
         node = node.placeholder;
-        console.log("placeholder", node);
         if (node != null) {
           params = Object.assign({ [node.param]: path });
-          // params[node.paramName] = section
           // paramsFound = true
         } else {
           break;
@@ -212,16 +202,9 @@ class Router {
       }
     }
 
-    //   if (component == null && child.wildcard != null) {
-    //     component = child.wildcard.component;
-    //     break outer;
-    //   }
-    // }
-
     if (node == null || node.component == null) {
       node = wildcardNode;
     }
-    console.log(node.component);
 
     return {
       params,
