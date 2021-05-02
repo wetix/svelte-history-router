@@ -2,21 +2,29 @@ import type { SvelteComponent } from "svelte";
 
 type Component = typeof SvelteComponent;
 
+type RouterOption = {
+  routes: Record<string, Component>;
+};
+
+type RouteResult = {
+  params: object;
+  component: Component;
+};
+
 // node types
-const ROOT_NODE = 0;
 const NORMAL_NODE = 1;
 const PLACEHOLDER_NODE = 2;
 const WILDCARD_NODE = 3;
 
 class Node {
   path: string = "";
-  param: null | string = null;
+  param?: string = null;
   children: Record<string, Node> = {};
   type: number = 0;
-  parent: null | Node = null;
-  placeholder: null | Node = null;
-  wildcard: null | Node = null;
-  component: Component = null;
+  parent?: Node = null;
+  placeholder?: Node = null;
+  wildcard?: Node = null;
+  component?: Component = null;
 
   constructor(parent: Node = null, type: number = 0, path: string = "") {
     this.parent = parent;
@@ -27,22 +35,6 @@ class Node {
     }
   }
 }
-
-// function Node(options) {
-//   options = options || {};
-//   this.type = options.type || NORMAL_NODE;
-
-//   // if placeholder node
-//   this.paramName = options.paramName || null;
-
-//   this.parent = options.parent || null;
-//   this.children = {};
-//   this.data = options.data || null;
-
-//   // keep track of special child nodes
-//   this.wildcardChildNode = null;
-//   this.placeholderChildNode = null;
-// }
 
 const getNodeType = (path: string) => {
   if (path.startsWith(":")) return PLACEHOLDER_NODE;
@@ -76,7 +68,7 @@ next '/' or the path end:
     /blog/go/                           no match
     /blog/go/request-routers/comments   no match
 
- Path: /files/*filepath
+ Path: /files/*
 
  Requests:
   /files/                             match: filepath="/"
@@ -84,15 +76,6 @@ next '/' or the path end:
   /files/templates/article.html       match: filepath="/templates/article.html"
   /files                              no match, but the router would redirect
 */
-
-type RouterOption = {
-  routes: Record<string, Component>;
-};
-
-type RouteResult = {
-  params: object;
-  component: Component;
-};
 
 class Router {
   #root: Node = new Node();
@@ -146,7 +129,6 @@ class Router {
 
         default:
           if (!(path in node.children)) {
-            // console.log("Node path =>", node.path, node);
             node.children[path] = childNode;
           } else {
             childNode = node.children[path];
@@ -208,7 +190,7 @@ class Router {
 
     return {
       params,
-      component: node.component,
+      component: node?.component,
     };
   };
 }

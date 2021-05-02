@@ -34,6 +34,7 @@ function serve() {
   };
 }
 
+let input = "public/main.ts";
 let output = {
   sourcemap: true,
   format: "iife",
@@ -42,6 +43,7 @@ let output = {
 };
 
 if (production) {
+  input = "src/index.js";
   output = [
     {
       format: "esm",
@@ -68,7 +70,7 @@ if (production) {
 }
 
 export default {
-  input: "public/main.ts",
+  input,
   output,
   plugins: [
     svelte({
