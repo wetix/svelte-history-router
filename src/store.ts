@@ -1,7 +1,7 @@
 import { derived, writable } from "svelte/store";
+
 const location$ = writable(new URL(window.location.href));
 
-let router = null;
 export const location = derived(location$, (loc) => loc);
 export const push = (url: string) => {
   location$.set(new URL(`${window.location.origin}${url}`));
