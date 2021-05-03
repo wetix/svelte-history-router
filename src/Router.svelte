@@ -1,38 +1,13 @@
-<script context="module" lang="ts">
-  import { derived, writable } from "svelte/store";
-
-  const location$ = writable(new URL(window.location.href));
-
-  let router = null;
-  export const location = derived(location$, (loc) => loc);
-  export const push = (url: string) => {
-    location$.set(new URL(`${window.location.origin}${url}`));
-    window.history.pushState({}, "", url);
-  };
-  export const pop = () => {
-    window.history.back();
-    location$.set(new URL(window.location.href));
-  };
-  export const replace = (url: string) => {
-    location$.set(new URL(`${window.location.origin}${url}`));
-    window.history.replaceState({}, "", url);
-  };
-
-  // detect user click back or next on browser
-  window.addEventListener("popstate", () => {
-    location$.set(new URL(window.location.href));
-  });
-</script>
-
 <script lang="ts">
   import { createEventDispatcher, SvelteComponent, tick } from "svelte";
   import Router from "./radix_tree";
+  import { location } from "./store";
 
   const dispatch = createEventDispatcher();
 
   export let routes: Record<string, typeof SvelteComponent> = {};
 
-  router = new Router({
+  const router = new Router({
     routes,
   });
 
@@ -47,7 +22,7 @@
   let component = null;
   let params = {};
   let prevLoc: URL = null;
-  location$.subscribe(async (loc) => {
+  location.subscribe(async (loc) => {
     // if location is same, don't replace the component
     console.log("Previous =>", prevLoc);
     console.log("Current =>", loc);

@@ -1,6 +1,6 @@
 {
-  "name": "svelte-router",
-  "version": "1.0.0",
+  "name": "svelte-history-router",
+  "version": "1.0.0-beta",
   "description": "A svelte history router.",
   "author": "Si3nLoong <sianloong90@gmail.com> (https://github.com/si3nloong)",
   "homepage": "https://github.com/wetix/svelte-history-router#readme",
@@ -11,12 +11,20 @@
   "unpkg": "lib/index.min.js",
   "svelte": "src/index.js",
   "types": "types/index.d.ts",
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "lib",
+    "types"
+  ],
   "scripts": {
     "build": "rimraf ./lib && rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear --single",
-    "validate": "svelte-check"
+    "validate": "svelte-check",
+    "tsd": "tsc -p tsd.json"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^18.0.0",

@@ -1,5 +1,5 @@
 <script>
-  import { push } from "../src/Router.svelte";
+  import { push } from "../src/";
 
   export let title = "";
 </script>
