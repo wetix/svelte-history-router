@@ -4,6 +4,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import sveltePreprocess from "svelte-preprocess";
+import bundleSize from "rollup-plugin-bundle-size";
 import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
 
@@ -43,7 +44,7 @@ let output = {
 };
 
 if (production) {
-  input = "src/index.js";
+  input = "src/index.ts";
   output = [
     {
       format: "esm",
@@ -110,6 +111,7 @@ export default {
     // If we're building for production (npm run build
     // instead of npm run dev), minify
     // production && terser(),
+    production && bundleSize(),
   ],
   watch: {
     clearScreen: false,

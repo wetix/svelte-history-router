@@ -4,3 +4,4 @@ dist
 lib
 *.lock
 .DS_Store
+stats.html
