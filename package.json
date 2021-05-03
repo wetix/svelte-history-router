@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A svelte history router.",
   "author": "Si3nLoong <sianloong90@gmail.com> (https://github.com/si3nloong)",
-  "homepage": "",
+  "homepage": "https://github.com/wetix/svelte-history-router#readme",
   "license": "MIT",
   "main": "lib/cjs/index.js",
   "browser": "lib/index.js",
