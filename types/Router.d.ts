@@ -5,7 +5,9 @@ type RouterProps = {
   routes: Record<string, typeof SvelteComponent>;
 };
 
-type RouterEvents = {};
+type RouterEvents = {
+  loaded: any;
+};
 
 type RouterSlot = {};
 

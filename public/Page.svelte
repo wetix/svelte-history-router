@@ -2,15 +2,22 @@
   import { push } from "../src/";
 
   export let title = "";
+  export let params = {};
 </script>
 
 <p style="border: 1px solid red; padding: 1rem;">{title}</p>
+<p style="border: 1px solid red; padding: 1rem;">{JSON.stringify(params)}</p>
 <p><a href="#" on:click|preventDefault={() => push("/")}>Home Page</a></p>
 <p><a href="#" on:click|preventDefault={() => push("/query")}>Query Page</a></p>
 <p><a href="#" on:click|preventDefault={() => push("/test")}>Test Page</a></p>
 <p>
   <a href="#" on:click|preventDefault={() => push("/me/profile")}
     >My Profile Page</a
+  >
+</p>
+<p>
+  <a href="#" on:click|preventDefault={() => push("/me/profile?name=me&age=12")}
+    >My Profile with Query Page</a
   >
 </p>
 <p>
@@ -26,6 +33,13 @@
 <p>
   <a href="#" on:click|preventDefault={() => push("/me/batman/info")}
     >Batman Info Page</a
+  >
+</p>
+<p>
+  <a
+    href="#"
+    on:click|preventDefault={() => push("/me/batman-and-joker/collaborate")}
+    >Batman and Joker Page</a
   >
 </p>
 <p><a href="#/ok">Hash Link</a></p>

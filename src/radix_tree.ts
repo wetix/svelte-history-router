@@ -1,6 +1,7 @@
 import type { SvelteComponent } from "svelte";
+import type { SvelteComponentDev } from "svelte/internal";
 
-type Component = typeof SvelteComponent;
+type Component = typeof SvelteComponent | SvelteComponentDev;
 
 type RouterOption = {
   routes: Record<string, Component>;
@@ -84,7 +85,7 @@ class Router {
     Object.entries(opt.routes).forEach(([k, v]) => {
       this.insertRoute(k, v);
     });
-    console.log(this.#root);
+    // console.log(this.#root);
   }
 
   insertRoute = (loc: string, component: Component) => {
@@ -145,8 +146,8 @@ class Router {
 
   lookupRoute = (url: URL): RouteResult => {
     let pathname = url.pathname.substr(1);
-    console.log("==================================>");
-    console.log("lookUp =>", pathname);
+    // console.log("==================================>");
+    // console.log("lookUp =>", pathname);
 
     let node = this.#root;
     let component: Component = null;
@@ -176,7 +177,7 @@ class Router {
       } else {
         node = node.placeholder;
         if (node != null) {
-          params = Object.assign({ [node.param]: path });
+          params = Object.assign(params, { [node.param]: path });
           // paramsFound = true
         } else {
           break;

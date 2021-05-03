@@ -17,9 +17,14 @@
     // "/me/:name": Page,
     "/me/:id/profile": wrapComponent(Page, { title: "Some one profile page" }),
     "/me/:id/info": wrapComponent(Page, { title: "Batman info page" }),
+    "/me/:id/:path": wrapComponent(Page, { title: "Multiple param page" }),
     "/query": QueryPage,
     "/about-us": AboutUsPage,
     "/*": Page,
+  };
+
+  const onLoaded = (e: CustomEvent) => {
+    console.log(e.detail);
   };
 </script>
 
@@ -29,7 +34,7 @@
     Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
     how to build Svelte apps.
   </p>
-  <Router {routes}>testing</Router>
+  <Router {routes} on:loaded={onLoaded}>testing</Router>
 </main>
 
 <style>
