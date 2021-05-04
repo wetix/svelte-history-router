@@ -79,7 +79,7 @@ next '/' or the path end:
 */
 
 class Router {
-  #root: Node = new Node();
+  private root: Node = new Node();
 
   constructor(opt: RouterOption) {
     Object.entries(opt.routes).forEach(([k, v]) => {
@@ -93,7 +93,7 @@ class Router {
       /^(http|https)\:\/\//.test(loc) ? loc : "http://wetix.my" + loc
     );
 
-    let node = this.#root;
+    let node = this.root;
     let pathname = url.pathname.substr(1);
     if (pathname == "") {
       node.path = pathname;
@@ -149,7 +149,7 @@ class Router {
     // console.log("==================================>");
     // console.log("lookUp =>", pathname);
 
-    let node = this.#root;
+    let node = this.root;
     let component: Component = null;
     let params = {};
     if (pathname === "") {
