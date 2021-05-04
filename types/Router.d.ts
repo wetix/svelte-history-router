@@ -16,3 +16,4 @@ declare class Router extends SvelteComponentTyped<
   RouterEvents,
   RouterSlot
 > {}
+export default Router;
