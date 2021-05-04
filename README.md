@@ -41,6 +41,105 @@ yarn add svelte-history-router
 - Reactive functions
 - Simple and configurable
 
+## How to use?
+
+### Define your routes
+
+Each route is a normal Svelte component, with the markup, scripts, bindings, etc. Any Svelte component can be a route.
+
+The route definition is just a JavaScript dictionary (object) where the key is a string with the path (including parameters, etc), and the value is the route object.
+
+For example:
+
+```js
+import Home from "./Home.svelte";
+import AboutUs from "./AboutUs.svelte";
+import MyProfile from "./MyProfile.svelte";
+import MyInfoProfile from "./MyInfoProfile.svelte";
+import MyPage from "./MyPage.svelte";
+import NotFound from "./NotFound.svelte";
+
+const routes = {
+  // Exact path
+  "/": Home,
+
+  // Using named parameters, with last being optional
+  "/me/:name/profile": MyProfile,
+  "/me/:name/info": MyInfoProfile,
+
+  // Wildcard parameter
+  "/me/*": MyPage,
+
+  "/about-us": AboutUs,
+  // Catch-all
+  // This is optional, but if present it must be the last
+  "*": NotFound,
+};
+```
+
+Routes must begin with / (or \* for the catch-all route). When you using \* wildcard route, you cannot place route path after \*.
+
+The order doesn't matters! Because the routing is follows the following priority :
+
+1. Exact match
+2. Placeholder match
+3. Wildcard match
+
+### Include the router view
+
+To display the router, in a Svelte component (usually App.svelte), first import the router component. Then, display the router anywhere you'd like by placing the component in the markup. For example:
+
+```svelte
+<script>
+    import Router from 'svelte-history-router';
+    import routes from './routes.ts';
+</script>
+
+<body>
+    <Router {routes}/>
+</body>
+```
+
+### Navigating between pages
+
+You can navigate between pages programmatically too:
+
+```js
+import { push, pop, replace } from "svelte-history-router";
+
+// The push(url) method navigates to another page, just like clicking on a link
+push("/me/joker/profile");
+
+// The pop() method is equivalent to hitting the back button in the browser
+pop();
+
+// The replace(url) method navigates to a new page, but without adding a new entry in the browser's history stack
+// So, clicking on the back button in the browser would not lead to the page users were visiting before the call to replace()
+replace("/me/profile");
+```
+
+These methods can be used inside Svelte markup too, for example:
+
+```svelte
+<button on:click={() => push('/page')}>Go somewhere</button>
+```
+
+The push, pop and replace methods perform navigation actions only in the next iteration ("tick") of the JavaScript event loop. This makes it safe to use them also inside onMount callbacks within Svelte components.
+
+### Parameters
+
+You can get the page parameters from the $params readable store. This is a Svelte store, so it can be used reactively too.
+
+```svelte
+<script>
+    import { params } from 'svelte-history-router'
+</script>
+
+<p>The page parameters is : {JSON.stringify(params)}</p>
+```
+
+<!-- https://svelte.dev/repl/6ff75248f7114cc983ebd70b7471171f?version=3.38.2 -->
+
 ## Sponsors
 
 <img src="https://asset.wetix.my/images/logo/wetix.png" alt="WeTix" width="240px">

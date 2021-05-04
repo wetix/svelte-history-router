@@ -13,6 +13,7 @@
   "include": ["src/*", "src/components/*"],
   "exclude": [
     "src/index.js",
+    "src/index.ts",
     "__tests__*",
     "node_modules/*",
     "__sapper__/*",

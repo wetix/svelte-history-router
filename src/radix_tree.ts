@@ -8,6 +8,7 @@ type RouterOption = {
 };
 
 type RouteResult = {
+  route: string;
   params: object;
   component: Component;
 };
@@ -85,7 +86,7 @@ class Router {
     Object.entries(opt.routes).forEach(([k, v]) => {
       this.insertRoute(k, v);
     });
-    // console.log(this.#root);
+    console.log(this.root);
   }
 
   insertRoute = (loc: string, component: Component) => {
@@ -95,11 +96,12 @@ class Router {
 
     let node = this.root;
     let pathname = url.pathname.substr(1);
-    if (pathname == "") {
-      node.path = pathname;
-      node.component = component;
-      return;
-    }
+    console.log("Pathname =>", pathname);
+    // if (pathname == "") {
+    //   node.path = pathname;
+    //   node.component = component;
+    //   return;
+    // }
 
     const paths = pathname.split("/");
     const len = paths.length;
@@ -112,7 +114,7 @@ class Router {
     for (; i < len; i++) {
       path = paths[i];
       nodeType = getNodeType(path);
-      childNode = new Node(node, nodeType, path);
+      childNode = new Node(this.root == node ? null : node, nodeType, path);
       switch (nodeType) {
         case PLACEHOLDER_NODE:
           if (node.placeholder) {
@@ -146,25 +148,17 @@ class Router {
 
   lookupRoute = (url: URL): RouteResult => {
     let pathname = url.pathname.substr(1);
-    // console.log("==================================>");
-    // console.log("lookUp =>", pathname);
-
-    let node = this.root;
-    let component: Component = null;
-    let params = {};
-    if (pathname === "") {
-      component = node.component;
-      return {
-        params,
-        component,
-      };
-    }
+    console.log("==================================>");
+    console.log("lookUp =>", pathname);
 
     const paths = pathname.split("/");
     const len = paths.length;
-    let wildcardNode;
 
     let i = 0;
+    let node = this.root;
+    let params = {};
+    let wildcardNode;
+
     for (; i < len; i++) {
       const path = paths[i];
       if (node.wildcard !== null) {
@@ -178,7 +172,6 @@ class Router {
         node = node.placeholder;
         if (node != null) {
           params = Object.assign(params, { [node.param]: path });
-          // paramsFound = true
         } else {
           break;
         }
@@ -189,9 +182,17 @@ class Router {
       node = wildcardNode;
     }
 
+    let route = "";
+    let component = node?.component;
+    while (node != null) {
+      route = "/" + node.path + route;
+      node = node.parent;
+    }
+
     return {
+      route,
       params,
-      component: node?.component,
+      component,
     };
   };
 }

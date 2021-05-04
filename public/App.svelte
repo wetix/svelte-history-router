@@ -1,6 +1,6 @@
 <script lang="ts">
   import { wrapComponent } from "@wetix/utils";
-  import Router from "../src/Router.svelte";
+  import Router, { params } from "../src/Router.svelte";
   import Page from "./Page.svelte";
   import AboutUsPage from "./pages/AboutUs.svelte";
   import QueryPage from "./pages/QueryString.svelte";
@@ -16,7 +16,7 @@
       title: "Test Page With Params",
     }),
 
-    "/me/*/profile": wrapComponent(Page, { title: "My Any Profile Page" }),
+    "/me/*": wrapComponent(Page, { title: "My Any Profile Page" }),
     "/me/profile": wrapComponent(Page, { title: "My Profile Page" }),
     "/me/:id/profile": wrapComponent(Page, {
       title: "My Profile Page With Params",
@@ -31,6 +31,10 @@
   const onLoaded = (e: CustomEvent) => {
     console.log(e.detail);
   };
+
+  params.subscribe((v) => {
+    console.log("Params =>", v);
+  });
 </script>
 
 <main>

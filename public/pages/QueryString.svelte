@@ -1,9 +1,9 @@
 <script lang="ts">
   import { fly } from "svelte/transition";
 
-  import { location, push, replace } from "../../src";
+  import { push, replace } from "../../src";
 
-  location.subscribe(console.log);
+  // location.subscribe(console.log);
 </script>
 
 <div class="box" in:fly>
@@ -25,7 +25,7 @@
     Push Query String
   </div>
   <div class="link" on:click={() => replace("/")}>Home</div>
-  <div>Query String : {JSON.stringify($location)}</div>
+  <!-- <div>Query String : {JSON.stringify($location)}</div> -->
 </div>
 
 <style>

@@ -1,4 +1,3 @@
-import Router from "./Router.svelte";
-import { location, push, pop, replace } from "./store";
+import Router, { location, params, push, pop, replace } from "./Router.svelte";
 
-export { Router, location, push, pop, replace };
+export { Router, location, params, push, pop, replace };

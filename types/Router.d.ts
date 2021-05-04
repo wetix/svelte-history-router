@@ -6,7 +6,14 @@ type RouterProps = {
 };
 
 type RouterEvents = {
-  loaded: any;
+  change: CustomEvent<{}>;
+  loaded: CustomEvent<{
+    route: string;
+    location: string;
+    params: Record<string, string>;
+    querystring: string;
+    component: typeof SvelteComponent;
+  }>;
 };
 
 type RouterSlot = {};
