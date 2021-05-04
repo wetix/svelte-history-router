@@ -1,17 +1,16 @@
 import { SvelteComponent } from "svelte";
 import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponentDev } from "svelte/internal";
 
 type RouterProps = {
-  routes: Record<string, typeof SvelteComponent>;
+  routes: Record<string, typeof SvelteComponent | SvelteComponentDev>;
 };
 
 type RouterEvents = {
-  change: CustomEvent<{}>;
-  loaded: CustomEvent<{
+  routeLoaded: CustomEvent<{
     route: string;
-    location: string;
+    location: URL;
     params: Record<string, string>;
-    querystring: string;
     component: typeof SvelteComponent;
   }>;
 };

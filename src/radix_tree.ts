@@ -86,7 +86,6 @@ class Router {
     Object.entries(opt.routes).forEach(([k, v]) => {
       this.insertRoute(k, v);
     });
-    console.log(this.root);
   }
 
   insertRoute = (loc: string, component: Component) => {

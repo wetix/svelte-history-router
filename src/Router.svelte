@@ -35,6 +35,10 @@
   import Router from "./radix_tree";
 
   const dispatch = createEventDispatcher();
+  const dispatchOnNext = async (evt: string, data: Record<string, any>) => {
+    await tick();
+    dispatch(evt, data);
+  };
 
   export let routes: Record<
     string,
@@ -48,21 +52,25 @@
   let component = null;
   let params: Record<string, string> = {};
   let prevLoc: URL = null;
+  let route = "";
   subscribe(async (loc) => {
-    console.log("onChange =>", loc);
+    // dispatchOnNext("change", {
+    //   location: loc,
+    //   params,
+    //   component,
+    // });
+
     // if location is same, don't replace the component
     if (!prevLoc || prevLoc.pathname !== loc.pathname) {
       const result = router.lookupRoute(loc);
-      console.log(result.route);
-      await tick();
-      const { route } = result;
+      route = result.route;
       component = result.component;
       params = result.params;
       params$.set(params);
-      dispatch("loaded", {
+
+      dispatchOnNext("routeLoaded", {
         route,
-        location: loc.pathname,
-        querystring: loc.search,
+        location: loc,
         params,
         component,
       });

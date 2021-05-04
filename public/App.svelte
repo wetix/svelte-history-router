@@ -1,6 +1,6 @@
 <script lang="ts">
   import { wrapComponent } from "@wetix/utils";
-  import Router, { params } from "../src/Router.svelte";
+  import Router, { params, location } from "../src/Router.svelte";
   import Page from "./Page.svelte";
   import AboutUsPage from "./pages/AboutUs.svelte";
   import QueryPage from "./pages/QueryString.svelte";
@@ -28,6 +28,12 @@
     "/*": Page,
   };
 
+  const onRouteChange = (e: CustomEvent) => {
+    console.log(e.detail);
+  };
+
+  $: console.log("debug =>", $location.searchParams.toString());
+
   const onLoaded = (e: CustomEvent) => {
     console.log(e.detail);
   };
@@ -43,7 +49,7 @@
     Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
     how to build Svelte apps.
   </p>
-  <Router {routes} on:loaded={onLoaded}>testing</Router>
+  <Router {routes} on:routeLoaded={onLoaded}>testing</Router>
 </main>
 
 <style>
