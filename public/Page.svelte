@@ -5,7 +5,7 @@
   export let params = {};
 </script>
 
-<p style="border: 1px solid red; padding: 1rem;">{title}</p>
+<p class="content" style="border: 1px solid red; padding: 1rem;">{title}</p>
 <p style="border: 1px solid red; padding: 1rem;">{JSON.stringify(params)}</p>
 <p><a href="#" on:click|preventDefault={() => push("/")}>Home Page</a></p>
 <p><a href="#" on:click|preventDefault={() => push("/query")}>Query Page</a></p>
