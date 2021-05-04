@@ -132,10 +132,10 @@ You can get the page parameters from the $params readable store. This is a Svelt
 
 ```svelte
 <script>
-    import { params } from 'svelte-history-router'
+    import { params } from 'svelte-history-router';
 </script>
 
-<p>The page parameters is : {JSON.stringify(params)}</p>
+<p>The page parameters is : {JSON.stringify($params)}</p>
 ```
 
 <!-- https://svelte.dev/repl/6ff75248f7114cc983ebd70b7471171f?version=3.38.2 -->
