@@ -27,6 +27,10 @@
     "/about-us": AboutUsPage,
     "/*": Page,
   };
+
+  const onLoaded = (e: CustomEvent) => {
+    console.log(e.detail);
+  };
 </script>
 
 <main>
@@ -35,7 +39,7 @@
     Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
     how to build Svelte apps.
   </p>
-  <Router {routes}>testing</Router>
+  <Router {routes} on:loaded={onLoaded}>testing</Router>
 </main>
 
 <style>

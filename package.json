@@ -1,6 +1,6 @@
 {
   "name": "svelte-history-router",
-  "version": "1.0.0-beta",
+  "version": "1.0.0-beta.1",
   "description": "A svelte history router.",
   "author": "Si3nLoong <sianloong90@gmail.com> (https://github.com/si3nloong)",
   "homepage": "https://github.com/wetix/svelte-history-router#readme",
@@ -21,6 +21,7 @@
   ],
   "scripts": {
     "cypress": "./node_modules/.bin/cypress open",
+    "prepublishOnly": "npm run build",
     "build": "rimraf ./lib && rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear --single",
@@ -28,6 +29,11 @@
     "tsd": "tsc -p tsd.json"
   },
   "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.13.15",
+    "@babel/preset-env": "^7.14.0",
+    "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@rollup/plugin-typescript": "^8.2.1",
