@@ -8,3 +8,5 @@ stats.html
 cypress/fixtures
 cypress/plugins
 cypress/support
+*.log
+*.lock
