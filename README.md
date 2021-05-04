@@ -5,6 +5,10 @@
 <p>
 
 [![Svelte v3](https://img.shields.io/badge/svelte-v3-orange.svg)](https://svelte.dev)
+[![npm](https://img.shields.io/npm/v/svelte-history-router.svg)](https://www.npmjs.com/package/svelte-history-router)
+[![download](https://img.shields.io/npm/dw/svelte-history-router.svg)](https://www.npmjs.com/package/svelte-history-router)
+[![Bundle Size](https://badgen.net/bundlephobia/minzip/svelte-history-router)](https://bundlephobia.com/result?p=svelte-history-router)
+[![LICENCE](https://img.shields.io/github/license/wetix/svelte-history-router)](https://github.com/wetix/svelte-history-router/blob/main/LICENSE)
 
 </p>
 

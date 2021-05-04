@@ -4,3 +4,4 @@ cypress/plugins
 cypress/support
 *.log
 *.lock
+.DS_Store
