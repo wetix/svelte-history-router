@@ -62,6 +62,7 @@ import NotFound from "./NotFound.svelte";
 const routes = {
   // Exact path
   "/": Home,
+  "/about-us": AboutUs,
 
   // Using named parameters, with last being optional
   "/me/:name/profile": MyProfile,
@@ -69,8 +70,6 @@ const routes = {
 
   // Wildcard parameter
   "/me/*": MyPage,
-
-  "/about-us": AboutUs,
 
   // Catch-all
   // This is optional, but if present it must be the last
