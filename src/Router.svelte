@@ -6,14 +6,19 @@
 
   export const location = { subscribe };
   export const params = { subscribe: params$.subscribe };
+
   export const push = (url: string) => {
     set(new URL(`${window.location.origin}${url}`));
     window.history.pushState({}, "", url);
   };
+
   export const pop = () => {
-    set(new URL(window.location.href));
     window.history.back();
+    setTimeout(() => {
+      set(new URL(window.location.href));
+    }, 0);
   };
+
   export const replace = (url: string) => {
     set(new URL(`${window.location.origin}${url}`));
     window.history.replaceState({}, "", url);
@@ -41,7 +46,7 @@
   });
 
   let component = null;
-  let params = {};
+  let params: Record<string, string> = {};
   let prevLoc: URL = null;
   subscribe(async (loc) => {
     console.log("onChange =>", loc);

@@ -26,7 +26,7 @@ yarn add svelte-history-router
 
 ## ❓ Why another Router?
 
-- Most of the router implementation are pretty naive, they use regex under the hook, which may have bad performance on routing (especially ).
+- Most of the router implementation are pretty naive, they use regex under the hook, which may have bad performance on routing especially you have a huge routing tree.
 - Most of the router using context api, which may required some setup steps when we using with `vite` or `snowpack`.
 
 ## ✨ Features
@@ -55,7 +55,7 @@ For example:
 import Home from "./Home.svelte";
 import AboutUs from "./AboutUs.svelte";
 import MyProfile from "./MyProfile.svelte";
-import MyInfoProfile from "./MyInfoProfile.svelte";
+import MyInfo from "./MyInfo.svelte";
 import MyPage from "./MyPage.svelte";
 import NotFound from "./NotFound.svelte";
 
@@ -65,12 +65,13 @@ const routes = {
 
   // Using named parameters, with last being optional
   "/me/:name/profile": MyProfile,
-  "/me/:name/info": MyInfoProfile,
+  "/me/:name/info": MyInfo,
 
   // Wildcard parameter
   "/me/*": MyPage,
 
   "/about-us": AboutUs,
+
   // Catch-all
   // This is optional, but if present it must be the last
   "*": NotFound,

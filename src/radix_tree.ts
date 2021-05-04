@@ -9,14 +9,14 @@ type RouterOption = {
 
 type RouteResult = {
   route: string;
-  params: object;
+  params: Record<string, string>;
   component: Component;
 };
 
 // node types
-const NORMAL_NODE = 1;
-const PLACEHOLDER_NODE = 2;
-const WILDCARD_NODE = 3;
+const NORMAL_NODE = 0;
+const PLACEHOLDER_NODE = 1;
+const WILDCARD_NODE = 2;
 
 class Node {
   path: string = "";
@@ -90,22 +90,12 @@ class Router {
   }
 
   insertRoute = (loc: string, component: Component) => {
-    const url = new URL(
-      /^(http|https)\:\/\//.test(loc) ? loc : "http://wetix.my" + loc
-    );
-
-    let node = this.root;
-    let pathname = url.pathname.substr(1);
-    console.log("Pathname =>", pathname);
-    // if (pathname == "") {
-    //   node.path = pathname;
-    //   node.component = component;
-    //   return;
-    // }
-
+    const url = new URL("http://wetix.my" + loc);
+    const pathname = url.pathname.substr(1);
     const paths = pathname.split("/");
     const len = paths.length;
 
+    let node = this.root;
     let childNode: Node;
     let nodeType: number;
     let path = "";
@@ -115,6 +105,7 @@ class Router {
       path = paths[i];
       nodeType = getNodeType(path);
       childNode = new Node(this.root == node ? null : node, nodeType, path);
+
       switch (nodeType) {
         case PLACEHOLDER_NODE:
           if (node.placeholder) {
@@ -147,10 +138,7 @@ class Router {
   };
 
   lookupRoute = (url: URL): RouteResult => {
-    let pathname = url.pathname.substr(1);
-    console.log("==================================>");
-    console.log("lookUp =>", pathname);
-
+    const pathname = url.pathname.substr(1);
     const paths = pathname.split("/");
     const len = paths.length;
 
