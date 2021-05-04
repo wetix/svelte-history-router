@@ -35,11 +35,11 @@ yarn add svelte-history-router
 - TypeScript as First Class Citizen
 - Lightweight
 - High performance
-- Ship with multiple formats (commonjs, iife, esm)
+- Ship with multiple output formats (commonjs, iife, esmodule)
 - No extra dependency
-- Dynamically-imported components and code-splitting
 - Reactive functions
 - Simple and configurable
+<!-- - Dynamically-imported components and code-splitting -->
 
 ## üìù How to use?
 
@@ -155,4 +155,4 @@ Thanks to these awesome companies for their support of Open Source developers ‚ù
 [![GitHub](https://jstools.dev/img/badges/github.svg)](https://github.com/open-source)
 [![NPM](https://jstools.dev/img/badges/npm.svg)](https://www.npmjs.com/)
 
-Inspired by [httprouter](https://github.com/julienschmidt/httprouter)
+Inspired by [radix-router](https://github.com/charlieduong94/radix-router)
