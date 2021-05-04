@@ -1,5 +1,6 @@
 import type { SvelteComponent } from "svelte";
-declare type Component = typeof SvelteComponent;
+import type { SvelteComponentDev } from "svelte/internal";
+declare type Component = typeof SvelteComponent | SvelteComponentDev;
 declare type RouterOption = {
     routes: Record<string, Component>;
 };

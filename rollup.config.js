@@ -45,7 +45,7 @@ let output = {
 };
 
 if (production) {
-  input = "src/index.ts";
+  input = "src/index.js";
   output = [
     {
       format: "esm",
