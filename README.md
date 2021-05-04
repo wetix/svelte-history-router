@@ -12,7 +12,7 @@
 
 </p>
 
-## Installation
+## 🔨 Installation
 
 ```console
 npm install svelte-history-router
@@ -24,12 +24,12 @@ or
 yarn add svelte-history-router
 ```
 
-## Why another Router?
+## ❓ Why another Router?
 
 - Most of the router implementation are pretty naive, they use regex under the hook, which may have bad performance on routing (especially ).
 - Most of the router using context api, which may required some setup steps when we using with `vite` or `snowpack`.
 
-## Features ✨
+## ✨ Features
 
 - History based routing
 - TypeScript as First Class Citizen
@@ -41,7 +41,7 @@ yarn add svelte-history-router
 - Reactive functions
 - Simple and configurable
 
-## How to use?
+## 📝 How to use?
 
 ### Define your routes
 
