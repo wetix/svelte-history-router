@@ -5,3 +5,6 @@ lib
 *.lock
 .DS_Store
 stats.html
+cypress/fixtures
+cypress/plugins
+cypress/support

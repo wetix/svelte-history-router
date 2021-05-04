@@ -9,14 +9,20 @@
 
   const routes = {
     "/": wrapComponent(Page, { title: "Home Page" }),
+
+    "/test/*": wrapComponent(Page, { title: "Test Page Any" }),
     "/test": wrapComponent(Page, { title: "Test Page" }),
-    "/test/:param1/:param2": wrapComponent(Page, { title: "Test Page" }),
-    // "/test/*": wrapComponent(Page, { title: "Test Page" }),
-    "/me/*": wrapComponent(Page, { title: "Me any page" }),
+    "/test/:param1/:param2": wrapComponent(Page, {
+      title: "Test Page With Params",
+    }),
+
+    "/me/*/profile": wrapComponent(Page, { title: "My Any Profile Page" }),
     "/me/profile": wrapComponent(Page, { title: "My Profile Page" }),
-    // "/me/:name": Page,
-    "/me/:id/profile": wrapComponent(Page, { title: "Some one profile page" }),
+    "/me/:id/profile": wrapComponent(Page, {
+      title: "My Profile Page With Params",
+    }),
     "/me/:id/info": wrapComponent(Page, { title: "Batman info page" }),
+
     "/query": QueryPage,
     "/about-us": AboutUsPage,
     "/*": Page,
