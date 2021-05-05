@@ -8,7 +8,7 @@
   export const params = { subscribe: params$.subscribe };
 
   export const push = (url: string) => {
-    set(new URL(`${window.location.origin}${url}`));
+    set(new URL(window.location.origin + url));
     window.history.pushState({}, "", url);
   };
 
@@ -20,7 +20,7 @@
   };
 
   export const replace = (url: string) => {
-    set(new URL(`${window.location.origin}${url}`));
+    set(new URL(window.location.origin + url));
     window.history.replaceState({}, "", url);
   };
 

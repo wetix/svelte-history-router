@@ -89,7 +89,7 @@ class Router {
   }
 
   insertRoute = (loc: string, component: Component) => {
-    const url = new URL("http://wetix.my" + loc);
+    const url = new URL(window.location.origin + loc);
     const pathname = url.pathname.substr(1);
     const paths = pathname.split("/");
     const len = paths.length;

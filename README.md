@@ -26,8 +26,8 @@ yarn add svelte-history-router
 
 ## ❓ Why another Router?
 
-- Most of the router implementation are pretty naive, they use regex under the hook, which may have bad performance on routing especially you have a huge routing tree.
-- Most of the router using context api, which may required some setup steps when we using with `vite` or `snowpack`.
+- Most of the router implementation are pretty naive, they use regex under the hook, which may have bad performance on routing especially with huge routing tree.
+- Most of the router using context api, which may required some setup when we use with `vite` or `snowpack`.
 
 ## ✨ Features
 

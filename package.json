@@ -1,6 +1,6 @@
 {
   "name": "svelte-history-router",
-  "version": "1.0.0-beta.13",
+  "version": "1.0.0-beta.14",
   "description": "A svelte history router.",
   "author": "Si3nLoong <sianloong90@gmail.com> (https://github.com/si3nloong)",
   "homepage": "https://github.com/wetix/svelte-history-router#readme",
@@ -42,7 +42,7 @@
     "core-js": "^3.11.3",
     "cypress": "^7.2.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.47.0",
+    "rollup": "2.46.0",
     "rollup-plugin-bundle-size": "^1.0.3",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",
