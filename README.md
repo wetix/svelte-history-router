@@ -102,7 +102,19 @@ To display the router, in a Svelte component (usually App.svelte), first import 
 
 ### Navigating between pages
 
-You can navigate between pages programmatically too:
+You can navigate between pages using anchor (<a>) tag with svelte action `link`. For example:
+
+```svelte
+<script>
+    import { link } from 'svelte-history-router';
+</script>
+
+<a use:link href="/me/profile">
+    <p>The Biggest Princess</p>
+</a>
+```
+
+Futhermore, you can navigate between pages programmatically too:
 
 ```js
 import { push, pop, replace } from "svelte-history-router";
@@ -168,4 +180,4 @@ Thanks to these awesome companies for their support of Open Source developers ‚ù
 [![GitHub](https://jstools.dev/img/badges/github.svg)](https://github.com/open-source)
 [![NPM](https://jstools.dev/img/badges/npm.svg)](https://www.npmjs.com/)
 
-Inspired by [radix-router](https://github.com/charlieduong94/radix-router)
+Inspired by [radix-router](https://github.com/charlieduong94/radix-router) and [svelte-spa-router](https://github.com/ItalyPaleAle/svelte-spa-router)
