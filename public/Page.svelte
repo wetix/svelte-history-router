@@ -1,8 +1,15 @@
 <script>
-  import { push } from "../src/";
+  import { push } from "../src";
 
   export let title = "";
   export let params = {};
+
+  const gotoPage = () => {
+    title = "Redirecting to batman page...";
+    setTimeout(() => {
+      push("/me/batman/info");
+    }, 100);
+  };
 </script>
 
 <p class="content" style="border: 1px solid red; padding: 1rem;">{title}</p>
@@ -13,6 +20,11 @@
 <p>
   <a href="#" on:click|preventDefault={() => push("/me/profile")}
     >My Profile Page</a
+  >
+</p>
+<p>
+  <a href="#" on:click|preventDefault={() => push("/me/joker/status")}
+    >My Status Page</a
   >
 </p>
 <p>
@@ -31,9 +43,7 @@
   >
 </p>
 <p>
-  <a href="#" on:click|preventDefault={() => push("/me/batman/info")}
-    >Batman Info Page</a
-  >
+  <a href="#" on:click|preventDefault={gotoPage}>Batman Info Page</a>
 </p>
 <p>
   <a

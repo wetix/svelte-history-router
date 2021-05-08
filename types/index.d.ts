@@ -1,8 +1,10 @@
 import type { Readable } from "svelte/store";
 import Router from "./Router";
+import { link } from "./link";
 export { Router };
-export declare const location: Readable<URL>;
+export { link };
+export declare const url: Readable<URL>;
 export declare const params: Readable<Record<string, string>>;
-export declare const push: (url: string) => void;
-export declare const pop: () => void;
-export declare const replace: (url: string) => void;
+export declare const push: (url: string) => Promise<void>;
+export declare const pop: () => Promise<void>;
+export declare const replace: (url: string) => Promise<void>;

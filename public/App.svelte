@@ -1,8 +1,9 @@
 <script lang="ts">
   import { wrapComponent } from "@wetix/utils";
-  import Router, { params, location } from "../src/Router.svelte";
+  import { Router, link, params, url } from "../src";
   import Page from "./Page.svelte";
   import AboutUsPage from "./pages/AboutUs.svelte";
+  import BatmanPage from "./pages/Batman.svelte";
   import QueryPage from "./pages/QueryString.svelte";
 
   export let name: string;
@@ -21,18 +22,19 @@
     "/me/:id/profile": wrapComponent(Page, {
       title: "My Profile Page With Params",
     }),
-    "/me/:id/info": wrapComponent(Page, { title: "Batman info page" }),
+    "/me/:id/info": BatmanPage,
+    "/me/:name/status": wrapComponent(Page, { title: "Status page" }),
 
     "/query": QueryPage,
     "/about-us": AboutUsPage,
-    "/*": Page,
+    // "/*": wrapComponent(Page, { title: "Not Found" }),
   };
 
   const onRouteChange = (e: CustomEvent) => {
     console.log(e.detail);
   };
 
-  $: console.log("debug =>", $location.searchParams.toString());
+  $: console.log("debug =>", $url.searchParams.toString());
 
   const onLoaded = (e: CustomEvent) => {
     console.log(e.detail);
@@ -41,6 +43,8 @@
   params.subscribe((v) => {
     console.log("Params =>", v);
   });
+
+  let value = "";
 </script>
 
 <main>
@@ -49,6 +53,22 @@
     Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
     how to build Svelte apps.
   </p>
+  <input bind:value />
+  <a href={value} use:link>
+    <p>Route to {value}</p>
+  </a>
+
+  <section use:link>
+    <div style="padding: 10px;">
+      <a href={`${location.origin}/me/profile`}>
+        <p>Route with local route</p>
+      </a>
+    </div>
+    <a href="https://google.com">
+      <p>Google</p>
+    </a>
+    <div style="cursor: pointer;">No effect click</div>
+  </section>
   <Router {routes} on:routeLoaded={onLoaded}>testing</Router>
 </main>
 

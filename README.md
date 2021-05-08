@@ -126,14 +126,14 @@ These methods can be used inside Svelte markup too, for example:
 
 The push, pop and replace methods perform navigation actions only in the next iteration ("tick") of the JavaScript event loop. This makes it safe to use them also inside onMount callbacks within Svelte components.
 
-### Location
+### URL
 
-You can get the page location information (it's an [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) object) from the `$location` readable store. This is a Svelte store, so it can be used reactively too.
+You can get the page url information (it's an [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/URL) object) from the `$url` readable store. This is a Svelte store, so it can be used reactively too.
 
 ```svelte
 <script>
-    import { location } from 'svelte-history-router';
-    const { searchParams } = $location;
+    import { url } from 'svelte-history-router';
+    const { searchParams } = $url;
 </script>
 
 <p>The page query string is : {searchParams.toString()}</p>

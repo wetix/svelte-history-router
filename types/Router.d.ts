@@ -4,6 +4,7 @@ import type { SvelteComponentDev } from "svelte/internal";
 
 type RouterProps = {
   routes: Record<string, typeof SvelteComponent | SvelteComponentDev>;
+  scrollRestoration: "auto" | "manual";
 };
 
 type RouterEvents = {

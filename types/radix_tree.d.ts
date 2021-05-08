@@ -5,11 +5,12 @@ declare type RouterOption = {
     routes: Record<string, Component>;
 };
 declare type RouteResult = {
-    params: object;
+    route: string;
+    params: Record<string, string>;
     component: Component;
 };
 declare class Router {
-    #private;
+    private root;
     constructor(opt: RouterOption);
     insertRoute: (loc: string, component: Component) => void;
     lookupRoute: (url: URL) => RouteResult;

@@ -5,6 +5,7 @@ type Component = typeof SvelteComponent | SvelteComponentDev;
 
 type RouterOption = {
   routes: Record<string, Component>;
+  scrollRestoration: string;
 };
 
 type RouteResult = {
@@ -21,6 +22,7 @@ const WILDCARD_NODE = 2;
 class Node {
   path: string = "";
   param?: string = null;
+  params: Record<string, number> = {};
   children: Record<string, Node> = {};
   type: number = 0;
   parent?: Node = null;
@@ -66,7 +68,7 @@ next '/' or the path end:
 
   Requests:
     /blog/go/request-routers            match: category="go", post="request-routers"
-    /blog/go/request-routers/           no match, but the router would redirect
+    /blog/go/request-routers/           no match
     /blog/go/                           no match
     /blog/go/request-routers/comments   no match
 
@@ -76,7 +78,7 @@ next '/' or the path end:
   /files/                             match: filepath="/"
   /files/LICENSE                      match: filepath="/LICENSE"
   /files/templates/article.html       match: filepath="/templates/article.html"
-  /files                              no match, but the router would redirect
+  /files                              no match
 */
 
 class Router {
