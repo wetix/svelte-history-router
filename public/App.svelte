@@ -26,6 +26,7 @@
     "/me/:name/status": wrapComponent(Page, { title: "Status page" }),
 
     "/query": QueryPage,
+    "/nested": wrapComponent(Page, { title: "NESTED page" }),
     "/about-us": AboutUsPage,
     // "/*": wrapComponent(Page, { title: "Not Found" }),
   };

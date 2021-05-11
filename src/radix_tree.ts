@@ -4,6 +4,7 @@ import type { SvelteComponentDev } from "svelte/internal";
 type Component = typeof SvelteComponent | SvelteComponentDev;
 
 type RouterOption = {
+  prefix: string;
   routes: Record<string, Component>;
   scrollRestoration: string;
 };
@@ -84,15 +85,15 @@ next '/' or the path end:
 class Router {
   private root: Node = new Node();
 
-  constructor(opt: RouterOption) {
+  constructor(opt: Partial<RouterOption>) {
     Object.entries(opt.routes).forEach(([k, v]) => {
-      this.insertRoute(k, v);
+      this.insertRoute(opt.prefix + k, v);
     });
   }
 
   insertRoute = (loc: string, component: Component) => {
     const url = new URL(window.location.origin + loc);
-    const pathname = url.pathname.substr(1);
+    const pathname = url.pathname.replace(/^\/|\/$/g, "");
     const paths = pathname.split("/");
     const len = paths.length;
 
@@ -139,7 +140,7 @@ class Router {
   };
 
   lookupRoute = (url: URL): RouteResult => {
-    const pathname = url.pathname.substr(1);
+    const pathname = url.pathname.replace(/^\/|\/$/g, "");
     const paths = pathname.split("/");
     const len = paths.length;
 

@@ -44,7 +44,7 @@
     dispatch(evt, data);
   };
 
-  // export let prefix = "";
+  export let prefix = "";
   export let routes: Record<
     string,
     typeof SvelteComponent | SvelteComponentDev
@@ -52,6 +52,7 @@
   export let scrollRestoration = "auto";
 
   const router = new Router({
+    prefix,
     routes,
     scrollRestoration,
   });

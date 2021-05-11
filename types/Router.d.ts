@@ -3,8 +3,9 @@ import type { SvelteComponentTyped } from "svelte";
 import type { SvelteComponentDev } from "svelte/internal";
 
 type RouterProps = {
+  prefix?: string;
   routes: Record<string, typeof SvelteComponent | SvelteComponentDev>;
-  scrollRestoration: "auto" | "manual";
+  scrollRestoration?: "auto" | "manual";
 };
 
 type RouterEvents = {
