@@ -165,15 +165,15 @@ You can get the page parameters from the `$params` readable store. This is a Sve
 
 <!-- https://svelte.dev/repl/6ff75248f7114cc983ebd70b7471171f?version=3.38.2 -->
 
-## Sponsors
+## 🔋 Sponsors
 
 <img src="https://asset.wetix.my/images/logo/wetix.png" alt="WeTix" width="240px">
 
-## License
+## 📄 License
 
 [svelte-history-router](https://github.com/wetix/svelte-history-router) is 100% free and open-source, under the [MIT license](https://github.com/wetix/svelte-history-router/blob/master/LICENSE).
 
-## Big Thanks To
+## 🎉 Big Thanks To
 
 Thanks to these awesome companies for their support of Open Source developers ❤
 
