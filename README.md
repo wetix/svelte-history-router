@@ -79,7 +79,7 @@ const routes = {
 
 Routes must begin with / (or \* for the catch-all route). When you using \* wildcard route, you cannot place route path after \*.
 
-The order doesn't matters! Because the routing is follows the following priority :
+The order do matters! Because the routing is follows the following priority :
 
 1. Exact match
 2. Placeholder match
