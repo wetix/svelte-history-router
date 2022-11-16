@@ -40,7 +40,7 @@
     "@tsconfig/svelte": "^3.0.0",
     "@wetix/utils": "^1.0.0-alpha.0",
     "core-js": "^3.12.1",
-    "cypress": "^9.0.0",
+    "cypress": "^11.1.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.49.0",
     "rollup-plugin-bundle-size": "^1.0.3",
